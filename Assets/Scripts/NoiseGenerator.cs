@@ -2,25 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public static class NoiseGenerator
 {
-    public static float[,] GenerateNoiseMap(int mapWidth, int mapHeight, int seed, float scale, int octaves, float persistence, float lacunarity, Vector2 offset, float contrast, float fudgeFactor)
+    public static float[,] GenerateNoiseMap(MapProprieties mapProprieties, int mapWidth, int mapHeight)
     {
         float[,] noiseMap = new float[mapWidth, mapHeight];
 
-        System.Random prng = new System.Random(seed);
-        Vector2[] octaveOffsets = new Vector2[octaves];
+        System.Random prng = new System.Random(mapProprieties.seed);
+        Vector2[] octaveOffsets = new Vector2[mapProprieties.octaves];
 
-        for (int i = 0; i < octaves; i++)
+        for (int i = 0; i < mapProprieties.octaves; i++)
         {
-            float offsetX = prng.Next(-100000, 100000) + offset.x;
-            float offsetY = prng.Next(-100000, 100000) + offset.y;
+            float offsetX = prng.Next(-100000, 100000) + mapProprieties.offset.x;
+            float offsetY = prng.Next(-100000, 100000) + mapProprieties.offset.y;
             octaveOffsets[i] = new Vector2(offsetX, offsetY);
-        }
-
-        if (scale <= 0)
-        {
-            scale = 0.0001f;
         }
 
         float halfWidth = mapWidth / 2f;
@@ -29,11 +25,10 @@ public static class NoiseGenerator
         float maxPossibleHeight = 0;
         float amplitude = 1;
 
-        // Calculate max possible height
-        for (int i = 0; i < octaves; i++)
+        for (int i = 0; i < mapProprieties.octaves; i++)
         {
             maxPossibleHeight += amplitude;
-            amplitude *= persistence;
+            amplitude *= mapProprieties.persistance;
         }
 
         for (int y = 0; y < mapHeight; y++)
@@ -44,24 +39,23 @@ public static class NoiseGenerator
                 float frequency = 1;
                 float noiseHeight = 0;
 
-                for (int i = 0; i < octaves; i++)
+                for (int i = 0; i < mapProprieties.octaves; i++)
                 {
-                    float sampleX = ((x - halfWidth) / scale + octaveOffsets[i].x) * frequency;
-                    float sampleY = ((y - halfHeight) / scale + octaveOffsets[i].y) * frequency;
+                    float sampleX = ((x - halfWidth) / mapProprieties.noiseScale + octaveOffsets[i].x) * frequency;
+                    float sampleY = ((y - halfHeight) / mapProprieties.noiseScale + octaveOffsets[i].y) * frequency;
 
                     float perlinValue = Mathf.PerlinNoise(sampleX, sampleY);
                     noiseHeight += perlinValue * amplitude;
 
-                    amplitude *= persistence;
-                    frequency *= lacunarity;
+                    amplitude *= mapProprieties.persistance;
+                    frequency *= mapProprieties.lacunarity;
                 }
 
                 noiseMap[x, y] = noiseHeight / maxPossibleHeight;
-                noiseMap[x, y] = Mathf.Pow(noiseMap[x, y] * fudgeFactor, contrast);
+                noiseMap[x, y] = Mathf.Pow(noiseMap[x, y] * mapProprieties.fudgeFactor, mapProprieties.contrast);
                 noiseMap[x, y] = Mathf.Clamp01(noiseMap[x, y]);
             }
         }
-
         return noiseMap;
     }
 }

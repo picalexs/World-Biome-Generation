@@ -10,7 +10,6 @@ public class MapGeneratorEditor : Editor
     {
         MapGenerator mapGen = (MapGenerator)target;
 
-
         if (DrawDefaultInspector())
         {
             if (mapGen.autoUpdate)
@@ -27,6 +26,11 @@ public class MapGeneratorEditor : Editor
         if (GUILayout.Button("Random Map Seed"))
         {
             mapGen.GenerateRandomMapSeed();
+        }
+
+        if (GUILayout.Button("Initialize Regions"))
+        {
+            mapGen.InitializeRegions();
         }
     }
 }
