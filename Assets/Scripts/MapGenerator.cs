@@ -16,6 +16,8 @@ public class MapGenerator : MonoBehaviour
 
     [SerializeField] private int seed;
     [SerializeField] private Vector2 offset;
+    [Range(0.1f, 5), SerializeField] private float contrast;
+    [Range(0.1f, 3), SerializeField] private float fudgeFactor;
 
     public bool autoUpdate;
 
@@ -23,7 +25,7 @@ public class MapGenerator : MonoBehaviour
 
     public void GenerateMap()
     {
-        float[,] noiseMap = NoiseGenerator.GenerateNoiseMap(mapWidth, mapHeight, seed, noiseScale, octaves, persistance, lacunarity, offset);
+        float[,] noiseMap = NoiseGenerator.GenerateNoiseMap(mapWidth, mapHeight, seed, noiseScale, octaves, persistance, lacunarity, offset, contrast, fudgeFactor);
 
         Color[] colorMap = new Color[mapWidth * mapHeight];
         for (int y = 0; y < mapHeight; y++)
