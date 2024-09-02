@@ -15,6 +15,7 @@ public static class TextureGenerator
         texture.Apply();
         return texture;
     }
+
     public static Texture2D TextureFromMap(float[,] map)
     {
         int width = map.GetLength(0);
