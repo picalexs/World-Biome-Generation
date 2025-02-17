@@ -1,6 +1,6 @@
 # 2D World Biome Generator
 
-A Unity-based application that generates 2D world biomes using Perlin noise and various blurring algorithms like Gaussian. The app creates realistic, diverse terrains that can be used as biomes in games or simulations.
+A Unity-based application that generates 2D world biomes using Perlin noise and various blurring algorithms like Gaussian. The app uses two different maps—one for height and another for moisture—to simulate diverse climates and biomes, creating realistic, varied terrains suitable for games or simulations.
 
 ## Features
 - **Perlin Noise**: Generates smooth, natural-looking random terrain.
